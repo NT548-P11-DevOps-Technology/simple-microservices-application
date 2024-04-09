@@ -41,7 +41,7 @@ services:
     networks:
       - frontend-net
     environment:
-      - REACT_APP_API_URL=http://student-backend:8081/
+      - REACT_APP_API_URL=http://student-backend:8080/
     depends_on:
       - student-backend
   student-backend:
