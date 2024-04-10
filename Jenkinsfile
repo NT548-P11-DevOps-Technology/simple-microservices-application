@@ -10,13 +10,13 @@ pipeline {
         }
         stage('Build') {
             steps {
+                echo 'Authenticating with Docker Hub...'
                 withDockerRegistry(credentialsId: 'dockerhub-account', url: 'https://index.docker.io/v1/') {
-                    echo 'Authenticating with Docker Hub...'
-                }
-                echo 'Building Docker image...'
-                sh 'docker-compose build'
-                sh 'docker images'
-                sh 'docker-compose ps'
+                    echo 'Building Docker image...'
+                    sh 'docker-compose build'
+                    sh 'docker images'
+                    sh 'docker-compose ps'
+                }               
             }
         }
         stage('Cleaning and Deploying') {
