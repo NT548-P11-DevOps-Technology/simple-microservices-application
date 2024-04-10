@@ -10,7 +10,7 @@ pipeline {
         stage('Build') {
             steps {
                 withDockerRegistry(credentialsId: 'docker-account', url: 'https://index.docker.io/v1/') {
-                    sh 'sudo docker-compose build'
+                    sh 'echo 200224 | sudo -S docker-compose build'
                     sh 'sudo docker images'
                     sh 'sudo docker-compose ps'
                 }
