@@ -16,7 +16,7 @@ pipeline {
                     sh 'docker compose build'
                     sh 'docker images'
                     sh 'docker compose ps'
-                }               
+                }
             }
         }
         stage('Cleaning and Deploying') {
