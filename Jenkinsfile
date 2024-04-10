@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    tools {
+        dockerTool 'docker'
+    }
+
     stages {
         stage('Check out') {
             steps {
@@ -26,6 +30,15 @@ pipeline {
                 sh 'docker-compose up'
                 sh 'docker-compose ps'
             }
+        }
+    }
+    post {
+        always {
+            echo 'Cleaning...'
+            sh 'docker-compose down'
+            sh 'docker-compose ps -a'
+            sh 'docker logout'
+            cleanWs()
         }
     }
 }
