@@ -9,7 +9,7 @@ pipeline {
         }
         stage('Build') {
             steps {
-                withDockerRegistry(credentialsId: 'docker-account', url: 'https://index.docker.io/v1/') {
+                withDockerRegistry(credentialsId: 'dockerhub-account', url: 'https://index.docker.io/v1/') {
                     sh 'docker-compose build'
                     sh 'docker images'
                     sh 'docker-compose ps'
