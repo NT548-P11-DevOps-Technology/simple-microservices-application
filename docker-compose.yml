@@ -16,7 +16,7 @@ services:
       - MYSQL_HOST=mysql-container
     volumes:
       - mysql-data:/var/lib/mysql
-      - ./mysql:/var/lib/mysql
+      # - ./mysql:/var/lib/mysql
   phpmyadmin:
     image: phpmyadmin:latest
     container_name: phpmyadmin-container
