@@ -9,9 +9,11 @@ pipeline {
         }
         stage('Build') {
             steps {
-                sh 'docker-compose build'
-                sh 'docker images'
-                sh 'docker-compose ps'
+                withDockerRegistry(credentialsId: 'dockerhub', url: 'https://index.docker.io/v1/') {
+                    sh 'docker-compose build'
+                    sh 'docker images'
+                    sh 'docker-compose ps'
+                }
             }
         }
         stage('Cleaning and Deploying') {
