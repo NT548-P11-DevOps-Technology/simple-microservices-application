@@ -45,6 +45,7 @@ pipeline {
             steps {
                 echo 'Cleaning...'
                 sh 'docker compose down'
+                sh 'echo y | docker container prune'
                 sh 'docker compose ps'
 
                 echo 'Deploying...'
@@ -59,6 +60,7 @@ pipeline {
         always {
             echo 'Cleaning...'
             sh 'docker compose down'
+            sh 'echo y | docker container prune'
             sh 'docker compose ps'
             sh 'docker logout'
             cleanWs()
