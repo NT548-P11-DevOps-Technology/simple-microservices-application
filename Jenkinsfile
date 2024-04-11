@@ -25,11 +25,13 @@ pipeline {
             steps {
                 echo 'student-backend is being built...'
                 sh 'docker compose build student-backend'
+            }
         }
         stage('Build front-end application image') {
             steps {
                 echo 'student-fronend is being built...'
                 sh 'docker compose build student-frontend'
+            }
         }
         stage('Check images and containers') {
             steps {
