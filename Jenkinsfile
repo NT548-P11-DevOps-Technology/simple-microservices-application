@@ -19,6 +19,7 @@ pipeline {
                 sh 'docker compose build mysql'
                 echo 'Building phpmyadmin image...'
                 sh 'docker compose build phpmyadmin'
+            }
         }
         stage('Build back-end application image') {
             steps {
