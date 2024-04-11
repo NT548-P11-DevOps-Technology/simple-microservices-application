@@ -34,7 +34,7 @@ services:
     build: 
       context: ./studentfrontend
       dockerfile: Dockerfile
-    image: student-frontend
+    image: th1enlm02/student-frontend
     container_name: student-frontend-container
     ports:
       - "3001:3000"
@@ -48,7 +48,7 @@ services:
     build: 
       context: ./studentsystem
       dockerfile: Dockerfile
-    image: student-backend
+    image: th1enlm02/student-backend
     container_name: student-backend-container
     ports:
       - "8081:8080"

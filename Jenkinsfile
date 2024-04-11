@@ -29,16 +29,15 @@ pipeline {
                 sh 'docker compose build student-frontend'
             }
         }
-        stage('Check images and containers') {
+        stage('Clean and Deploy to Dev Environment') {
             steps {
+                echo 'Images and containers...'
                 sh 'docker images'
                 sh 'docker compose ps'
             }
-        }
-        stage('Cleaning and Deploying') {
             steps {
                 echo 'Cleaning...'
-                sh 'docker compose down'
+                sh 'docker compose down -v'
                 sh 'echo y | docker container prune'
                 sh 'docker compose ps'
 
@@ -53,7 +52,7 @@ pipeline {
     post {
         always {
             echo 'Cleaning...'
-            sh 'docker compose down'
+            sh 'docker compose down -v'
             sh 'echo y | docker container prune'
             sh 'docker compose ps'
             sh 'docker logout'
