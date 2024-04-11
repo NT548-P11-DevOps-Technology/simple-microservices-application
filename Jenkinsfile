@@ -2,12 +2,6 @@ pipeline {
     agent any
 
     stages {
-        stage('Check out') {
-            steps {
-                echo 'Checking out code...'
-                checkout scm
-            }
-        }
         stage('Authenticate with Docker Hub') {
             steps {
                 withDockerRegistry(credentialsId: 'dockerhub-account', url: 'https://index.docker.io/v1/') {
