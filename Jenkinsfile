@@ -9,8 +9,10 @@ pipeline {
             }
         }
         stage('Authenticate with Docker Hub') {
-            withDockerRegistry(credentialsId: 'dockerhub-account', url: 'https://index.docker.io/v1/') {
-                echo 'Logged in to Docker Hub'
+            steps {
+                withDockerRegistry(credentialsId: 'dockerhub-account', url: 'https://index.docker.io/v1/') {
+                    echo 'Logged in to Docker Hub'
+                }
             }
         }
         stage('Set up database') {
