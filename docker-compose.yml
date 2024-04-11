@@ -11,7 +11,7 @@ services:
     environment:
       - MYSQL_DATABASE=studentdb
       - MYSQL_USER=th1enlm02
-      - MYSQL_USER_PASSWORD=th1enlm02
+      - MYSQL_PASSWORD=th1enlm02 # new line
       - MYSQL_ROOT_PASSWORD=th1enlm02_root
       - MYSQL_HOST=mysql-container
     volumes:

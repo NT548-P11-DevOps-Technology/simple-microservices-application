@@ -8,15 +8,32 @@ pipeline {
                 checkout scm
             }
         }
-        stage('Build') {
+        stage('Authenticate with Docker Hub') {
+            withDockerRegistry(credentialsId: 'dockerhub-account', url: 'https://index.docker.io/v1/') {
+                echo 'Logged in to Docker Hub'
+            }
+        }
+        stage('Set up database') {
             steps {
-                echo 'Authenticating with Docker Hub...'
-                withDockerRegistry(credentialsId: 'dockerhub-account', url: 'https://index.docker.io/v1/') {
-                    echo 'Building Docker image...'
-                    sh 'docker compose build'
-                    sh 'docker images'
-                    sh 'docker compose ps'
-                }
+                echo 'Building mysql image...'
+                sh 'docker compose build mysql'
+                echo 'Building phpmyadmin image...'
+                sh 'docker compose build phpmyadmin'
+        }
+        stage('Build back-end application image') {
+            steps {
+                echo 'student-backend is being built...'
+                sh 'docker compose build student-backend'
+        }
+        stage('Build front-end application image') {
+            steps {
+                echo 'student-fronend is being built...'
+                sh 'docker compose build student-frontend'
+        }
+        stage('Check images and containers') {
+            steps {
+                sh 'docker images'
+                sh 'docker compose ps'
             }
         }
         stage('Cleaning and Deploying') {
