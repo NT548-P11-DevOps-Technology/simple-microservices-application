@@ -34,8 +34,7 @@ pipeline {
                 echo 'Listing Images and containers...'
                 sh 'docker images'
                 sh 'docker compose ps'
-            }
-            steps {
+
                 echo 'Cleaning...'
                 sh 'docker compose down -v'
                 sh 'echo y | docker container prune'
@@ -46,8 +45,7 @@ pipeline {
                 sh 'docker compose ps'
                 sh 'docker network ls'
                 sh 'docker volume ls'
-            }
-            steps {
+
                 echo 'Pushing images to Docker Hub...'
                 sh 'docker compose push'
             }
@@ -62,5 +60,20 @@ pipeline {
             sh 'docker logout'
             cleanWs()
         }
+        success {
+            echo 'Deployment to Dev Environment is successful!'
+        }
+        failure {
+            echo 'Deployment to Dev Environment failed!'
+        }
+        unstable {
+            echo 'Deployment to Dev Environment is unstable!'
+        }
+        changed {
+            echo 'Deployment to Dev Environment is changed!'
+        }
+    }
+    options {
+        timeout(time: 1, unit: 'HOURS')
     }
 }
