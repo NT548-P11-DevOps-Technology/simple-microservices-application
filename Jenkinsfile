@@ -47,6 +47,10 @@ pipeline {
                 sh 'docker network ls'
                 sh 'docker volume ls'
             }
+            step {
+                echo 'Pushing images to Docker Hub...'
+                sh 'docker compose push'
+            }
         }
     }
     post {
