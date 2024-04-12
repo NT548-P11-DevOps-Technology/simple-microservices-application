@@ -31,8 +31,10 @@ pipeline {
         }
         stage('Push images to Docker Hub') {
             steps {
-                echo 'Pushing images to Docker Hub...'
-                sh 'docker compose push'
+                withDockerRegistry(credentialsId: 'dockerhub-account', url: 'https://index.docker.io/v1/') {
+                    echo 'Pushing images to Docker Hub...'
+                    sh 'docker compose push'
+                }
             }
         }
         stage('Clean and Deploy to Dev Environment') {
