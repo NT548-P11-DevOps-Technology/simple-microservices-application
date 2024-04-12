@@ -31,7 +31,7 @@ pipeline {
         }
         stage('Clean and Deploy to Dev Environment') {
             steps {
-                echo 'Images and containers...'
+                echo 'Listing Images and containers...'
                 sh 'docker images'
                 sh 'docker compose ps'
             }
