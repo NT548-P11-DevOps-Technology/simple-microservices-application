@@ -29,6 +29,12 @@ pipeline {
                 sh 'docker compose build student-frontend'
             }
         }
+        stage('Push images to Docker Hub') {
+            steps {
+                echo 'Pushing images to Docker Hub...'
+                sh 'docker compose push'
+            }
+        }
         stage('Clean and Deploy to Dev Environment') {
             steps {
                 echo 'Listing Images and containers...'
@@ -41,13 +47,10 @@ pipeline {
                 sh 'docker compose ps'
 
                 echo 'Deploying...'
-                sh 'docker compose up'
+                sh 'docker compose up -d'
                 sh 'docker compose ps'
                 sh 'docker network ls'
                 sh 'docker volume ls'
-
-                echo 'Pushing images to Docker Hub...'
-                sh 'docker compose push'
             }
         }
     }
