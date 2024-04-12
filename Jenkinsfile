@@ -62,7 +62,7 @@ pipeline {
             // sh 'docker compose down -v'
             // sh 'echo y | docker container prune'
             // sh 'docker compose ps'
-            // sh 'docker logout'
+            sh 'docker logout'
             cleanWs()
         }
         success {
