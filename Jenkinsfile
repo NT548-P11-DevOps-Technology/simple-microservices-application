@@ -73,7 +73,7 @@ pipeline {
             echo 'Deployment to Dev Environment is changed!'
         }
     }
-    options {
-        timeout(time: 1, unit: 'HOURS')
-    }
+    // options {
+    //     timeout(time: 1, unit: 'HOURS')
+    // }
 }
