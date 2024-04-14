@@ -39,7 +39,7 @@ pipeline {
         }
         stage('Clean and Deploy to Dev Environment') {
             steps {
-                echo 'Listing Images and containers...'
+                echo 'Listing images and containers...'
                 sh 'docker images'
                 sh 'docker compose ps'
 
@@ -59,9 +59,6 @@ pipeline {
     post {
         always {
             echo 'Cleaning...'
-            // sh 'docker compose down -v'
-            // sh 'echo y | docker container prune'
-            // sh 'docker compose ps'
             sh 'docker logout'
             cleanWs()
         }
@@ -78,7 +75,4 @@ pipeline {
             echo 'Deployment to Dev Environment is changed!'
         }
     }
-    // options {
-    //     timeout(time: 1, unit: 'HOURS')
-    // }
 }
