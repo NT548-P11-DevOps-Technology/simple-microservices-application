@@ -1,11 +1,6 @@
 pipeline {
     agent any
 
-    tools {
-        maven 'my-maven'
-        jdk 'jdk21'
-    }
-
     stages {
         stage('Authenticate with Docker Hub') {
             steps {
