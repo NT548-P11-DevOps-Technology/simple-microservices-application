@@ -1,0 +1,54 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: studentfrontend-service
+spec:
+  selector:
+    app: studentfrontend
+  type: NodePort
+  ports:
+    - protocol: TCP
+      port: 3000
+      targetPort: 3001
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: studentbackend-service
+spec:
+  selector:
+    app: studentbackend
+  type: NodePort
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8081
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-service
+spec:
+  selector:
+    app: mysql
+  type: NodePort
+  ports:
+    - protocol: TCP
+      port: 3306
+      targetPort: 3307
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: phpmyadmin-service
+spec:
+  selector:
+    app: phpmyadmin
+  type: NodePort
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 81

@@ -48,11 +48,23 @@ pipeline {
                 sh 'echo y | docker container prune'
                 sh 'docker compose ps'
 
-                echo 'Deploying...'
+                echo 'Deploying to Dev Environment...'
                 sh 'docker compose up -d'
                 sh 'docker compose ps'
                 sh 'docker network ls'
                 sh 'docker volume ls'
+            }
+        }
+        stage('Deploy to Kubernetes') {
+            steps {
+                withKubeConfig(caCertificate: '', clusterName: 'kubernetes', contextName: '', credentialsId: 'k8s-token', namespace: 'default', restrictKubeConfigAccess: false, serverUrl: 'https://172.31.39.233:6443') {
+                    echo 'Deploying to Kubernetes...'
+                    sh 'kubectl apply -f deployment.yaml'
+                    sh 'kubectl apply -f service.yaml'
+                    echo 'Checking deployment status...'
+                    sh 'kubectl get svc'
+                    sh 'kubectl get pods'
+                }
             }
         }
     }
