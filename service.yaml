@@ -29,11 +29,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: mysql-service
+  name: mysql-service-headless
 spec:
   selector:
     app: mysql
-  clusterIP: none
+  clusterIP: None
   ports:
     - protocol: TCP
       port: 3307
