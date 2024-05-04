@@ -5,7 +5,7 @@ metadata:
 spec:
   selector:
     app: studentfrontend
-  type: NodePort
+  type: LoadBalancer
   ports:
     - protocol: TCP
       port: 3001
@@ -19,7 +19,7 @@ metadata:
 spec:
   selector:
     app: studentbackend
-  type: NodePort
+  type: LoadBalancer
   ports:
     - protocol: TCP
       port: 8081
@@ -33,7 +33,7 @@ metadata:
 spec:
   selector:
     app: mysql
-  type: NodePort
+  clusterIP: none
   ports:
     - protocol: TCP
       port: 3307
@@ -47,7 +47,7 @@ metadata:
 spec:
   selector:
     app: phpmyadmin
-  type: NodePort
+  type: LoadBalancer
   ports:
     - protocol: TCP
       port: 81
