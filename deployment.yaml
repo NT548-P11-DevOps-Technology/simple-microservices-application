@@ -76,25 +76,7 @@ spec:
               value: th1enlm02_root
             - name: MYSQL_HOST
               value: mysql-container
-          volumeMounts:
-            - name: mysql-data
-              mountPath: /var/lib/mysql
-          livenessProbe:
-            exec:
-              command:
-                - "curl"
-                - "-f"
-                - "http://localhost:3306"
-            initialDelaySeconds: 30
-            periodSeconds: 30
-            timeoutSeconds: 20
-            successThreshold: 1
-            failureThreshold: 3
-      volumes:
-        - name: mysql-data
-          persistentVolumeClaim:
-            claimName: mysql-pvc
-
+              
 ---
 apiVersion: apps/v1
 kind: Deployment
