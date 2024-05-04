@@ -57,7 +57,7 @@ pipeline {
         }
         stage('Deploy to Kubernetes') {
             steps {
-                withKubeConfig(caCertificate: '', clusterName: 'kubernetes', contextName: '', credentialsId: 'k8s-token', namespace: 'jenkins', restrictKubeConfigAccess: false, serverUrl: 'https://172.31.42.51:6443') {
+                withKubeConfig(caCertificate: '', clusterName: 'kubernetes', contextName: '', credentialsId: 'k8s-token', namespace: 'jenkins', restrictKubeConfigAccess: false, serverUrl: 'https://ec2-18-143-171-181.ap-southeast-1.compute.amazonaws.com:6443') {
                     echo 'Deploying to Kubernetes...'
                     sh 'kubectl apply -f deployment.yaml'
                     sh 'kubectl apply -f service.yaml'
