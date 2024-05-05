@@ -42,6 +42,15 @@ spec:
           image: th1enlm02/student-backend:latest
           ports:
             - containerPort: 8080
+          env:
+            - name: DB_HOST
+              value: mysql
+            - name: DB_NAME
+              value: studentdb
+            - name: DB_USERNAME
+              value: root
+            - name: DB_PASSWORD
+              value: th1enlm02_root
 
 ---
 apiVersion: apps/v1
@@ -55,6 +64,8 @@ spec:
   selector:
     matchLabels:
       app: mysql
+  strategy:
+    type: Recreate
   template:
     metadata:
       labels:
