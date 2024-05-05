@@ -60,7 +60,7 @@ metadata:
   labels:
     app: mysql
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: mysql
@@ -96,7 +96,7 @@ metadata:
   labels:
     app: phpmyadmin
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: phpmyadmin
