@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: mysql-configMap
+  name: mysql_configMap
 data:
   host: mysql
   dbName: studentdb
