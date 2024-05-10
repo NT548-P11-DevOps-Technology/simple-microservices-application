@@ -46,23 +46,23 @@ spec:
             - name: DB_HOST
               valueFrom:
                 configMapKeyRef:
-                  name: mysql_configMap
+                  name: mysqlConfigMap
                   key: host
             - name: DB_NAME
               valueFrom:
                 configMapKeyRef:
-                  name: mysql_configMap
+                  name: mysqlConfigMap
                   key: dbName
             - name: DB_USERNAME
               valueFrom:
                 secretKeyRef:
-                  name: mysql_secrets
-                  key: mysql_username
+                  name: mysqlSecrets
+                  key: username
             - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: mysql_secrets
-                  key: mysql_root_password
+                  name: mysqlSecrets
+                  key: rootPassword
 
 ---
 apiVersion: apps/v1
@@ -92,28 +92,28 @@ spec:
             - name: MYSQL_DATABASE
               valueFrom:
                 configMapKeyRef:
-                  name: mysql_configMap
+                  name: mysqlConfigMap
                   key: dbName
             - name: MYSQL_HOST
               valueFrom:
                 configMapKeyRef:
-                  name: mysql_configMap
+                  name: mysqlConfigMap
                   key: host
             - name: MYSQL_USER
               valueFrom:
                 secretKeyRef:
-                  name: mysql_secrets
-                  key: mysql_username
+                  name: mysqlSecrets
+                  key: username
             - name: MYSQL_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: mysql_secrets
-                  key: mysql_password
+                  name: mysqlSecrets
+                  key: password
             - name: MYSQL_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: mysql_secrets
-                  key: mysql_root_password
+                  key: rootPassword
               
 ---
 apiVersion: apps/v1
