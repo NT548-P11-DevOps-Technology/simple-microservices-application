@@ -44,13 +44,25 @@ spec:
             - containerPort: 8080
           env:
             - name: DB_HOST
-              value: mysql
+              valueFrom:
+                configMapKeyRef:
+                  name: mysql-configMap
+                  key: host
             - name: DB_NAME
-              value: studentdb
+              valueFrom:
+                configMapKeyRef:
+                  name: mysql-configMap
+                  key: dbName
             - name: DB_USERNAME
-              value: root
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-secrets
+                  key: mysql-username
             - name: DB_PASSWORD
-              value: th1enlm02_root
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-secrets
+                  key: mysql-root_password
 
 ---
 apiVersion: apps/v1
@@ -78,15 +90,30 @@ spec:
             - containerPort: 3306
           env:
             - name: MYSQL_DATABASE
-              value: studentdb
-            - name: MYSQL_USER
-              value: th1enlm02
-            - name: MYSQL_PASSWORD
-              value: th1enlm02
-            - name: MYSQL_ROOT_PASSWORD
-              value: th1enlm02_root
+              valueFrom:
+                configMapKeyRef:
+                  name: mysql-configMap
+                  key: dbName
             - name: MYSQL_HOST
-              value: mysql-container
+              valueFrom:
+                configMapKeyRef:
+                  name: mysql-configMap
+                  key: host
+            - name: MYSQL_USER
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-secrets
+                  key: mysql-username
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-secrets
+                  key: mysql-password
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-secrets
+                  key: mysql-root_password
               
 ---
 apiVersion: apps/v1
