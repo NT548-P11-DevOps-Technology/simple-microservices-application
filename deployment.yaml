@@ -86,6 +86,11 @@ spec:
       containers:
         - name: mysql-container
           image: mysql:8.3.0
+          resources:
+            requests:
+              ephemeral-storage: "1Gi"
+            limits:
+              ephemeral-storage: "2Gi"
           ports:
             - containerPort: 3306
           env:
