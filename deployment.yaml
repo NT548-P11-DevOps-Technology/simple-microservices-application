@@ -46,22 +46,22 @@ spec:
             - name: DB_HOST
               valueFrom:
                 configMapKeyRef:
-                  name: mysqlConfigMap
+                  name: mysql-configmap
                   key: host
             - name: DB_NAME
               valueFrom:
                 configMapKeyRef:
-                  name: mysqlConfigMap
+                  name: mysql-configmap
                   key: dbName
             - name: DB_USERNAME
               valueFrom:
                 secretKeyRef:
-                  name: mysqlSecrets
+                  name: mysql-secrets
                   key: username
             - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: mysqlSecrets
+                  name: mysql-secrets
                   key: rootPassword
 
 ---
@@ -92,22 +92,22 @@ spec:
             - name: MYSQL_DATABASE
               valueFrom:
                 configMapKeyRef:
-                  name: mysqlConfigMap
+                  name: mysql-configmap
                   key: dbName
             - name: MYSQL_HOST
               valueFrom:
                 configMapKeyRef:
-                  name: mysqlConfigMap
+                  name: mysql-configmap
                   key: host
             - name: MYSQL_USER
               valueFrom:
                 secretKeyRef:
-                  name: mysqlSecrets
+                  name: mysql-secrets
                   key: username
             - name: MYSQL_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: mysqlSecrets
+                  name: mysql-secrets
                   key: password
             - name: MYSQL_ROOT_PASSWORD
               valueFrom:
