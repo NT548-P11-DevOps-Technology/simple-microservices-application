@@ -1,1 +1,1 @@
-simple fullstack web app
+Microservices application
