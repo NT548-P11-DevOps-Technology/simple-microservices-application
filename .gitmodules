@@ -1,8 +1,20 @@
-[submodule "studentfrontend"]
-	path = studentfrontend
-	url = https://github.com/th1enlm02/studentfrontend.git
+[submodule "class-management-FE"]
+	path = class-management-FE
+	url = https://github.com/th1enlm02/class-management-FE.git
 	branch = main
-[submodule "studentsystem"]
-	path = studentsystem
-	url = https://github.com/th1enlm02/studentsystem.git
+[submodule "class-management-auth-service"]
+	path = class-management-auth-service
+	url = https://github.com/th1enlm02/class-management-auth-service.git
+	branch = main
+[submodule "class-management-student-service"]
+	path = class-management-student-service
+	url = https://github.com/th1enlm02/class-management-student-service.git
+	branch = main
+[submodule "class-management-lecturer-service"]
+	path = class-management-lecturer-service
+	url = https://github.com/th1enlm02/class-management-lecturer-service.git
+	branch = main
+[submodule "class-management-class-service"]
+	path = class-management-class-service
+	url = https://github.com/th1enlm02/class-management-class-service.git
 	branch = main
