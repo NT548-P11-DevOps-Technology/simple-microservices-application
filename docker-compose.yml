@@ -72,7 +72,7 @@ services:
     depends_on:
       - student-service-mysql
   mongodb:
-    image: mongo:latest
+    image: mongo:7.0.9
     container_name: mongodb-container
     restart: on-failure
     ports:
@@ -84,10 +84,16 @@ services:
       - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
     volumes:
       - mongodb-data:/data/db
+    healthcheck:
+      test: ["CMD","mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
   mongo-express:
     image: mongo-express:latest
     container_name: mongo-express-container
-    restart: on-failure
+    restart: always
     ports:
       - "8081:8081"
     networks:
@@ -98,7 +104,8 @@ services:
       - ME_CONFIG_MONGODB_ADMINUSERNAME=${ME_CONFIG_MONGODB_ADMINUSERNAME}
       - ME_CONFIG_MONGODB_ADMINPASSWORD=${ME_CONFIG_MONGODB_ADMINPASSWORD}
     depends_on:
-      - mongodb
+      mongodb:
+        condition: service_healthy
   postgresql:
     image: postgres:latest
     container_name: postgresql-container
@@ -148,7 +155,7 @@ services:
       - REACT_APP_BASE_URL_AUTH=http://localhost:3077
       - REACT_APP_BASE_URL_STUDENT=http://localhost:8080
       - REACT_APP_BASE_URL_LECTURER=http://localhost:5000
-      - REACT_APP_BASE_URL_CLASS=http://localhost:80
+      - REACT_APP_BASE_URL_CLASS=http://localhost:8000
     depends_on:
       - class-mangement-auth-service
       - class-management-student-service
@@ -202,12 +209,13 @@ services:
     ports:
       - "5000:5000"
     environment:
-      - HOST_NAME=${ME_CONFIG_MONGODB_ADMINUSERNAME}:${ME_CONFIG_MONGODB_ADMINPASSWORD}@mongodb-container
+      - HOST_NAME=${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@mongodb-container
     networks:
       - frontend-network
       - backend-network
     depends_on:
-      - mongodb
+      mongodb:
+        condition: service_healthy
   class-management-class-service:
     build:
       context: ./class-management-class-service
