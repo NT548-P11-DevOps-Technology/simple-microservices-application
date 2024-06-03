@@ -121,12 +121,12 @@ spec:
                 secretKeyRef:
                   name: auth-service-mysql-secret
                   key: rootPassword
-          volumneMounts:
+          volumeMounts:
             - name: auth-service-mysql-data
               mountPath: /var/lib/mysql
             - name: init-sql
               mountPath: /docker-entrypoint-initdb.d
-      volumnes:
+      volumes:
         - name: auth-service-mysql-data
           persistentVolumeClaim:
             claimName: auth-service-mysql-pvc
@@ -247,10 +247,10 @@ spec:
                 secretKeyRef:
                   name: student-service-mysql-secret
                   key: rootPassword
-          volumneMounts:
+          volumeMounts:
             - name: student-service-mysql-data
               mountPath: /var/lib/mysql
-      volumnes:
+      volumes:
         - name: student-service-mysql-data
           persistentVolumeClaim:
             claimName: student-service-mysql-pvc
@@ -346,10 +346,10 @@ spec:
                 secretKeyRef:
                   name: lecturer-service-mongodb-secret
                   key: password
-          volumneMounts:
+          volumeMounts:
             - name: lecturer-service-mongodb-data
               mountPath: /data/db
-      volumnes:
+      volumes:
         - name: lecturer-service-mongodb-data
           persistentVolumeClaim:
             claimName: mongodb-pvc
@@ -475,12 +475,12 @@ spec:
                 secretKeyRef:
                   name: class-service-postgresql-secret
                   key: password
-          volumneMounts:
+          volumeMounts:
             - name: class-service-postgresql-data
               mountPath: /var/lib/postgresql/data
             - name: init-sql
               mountPath: /docker-entrypoint-initdb.d
-      volumnes:
+      volumes:
         - name: class-service-postgresql-data
           persistentVolumeClaim:
             claimName: postgresql-pvc
