@@ -27,7 +27,7 @@ spec:
             - name: REACT_APP_BASE_URL_LECTURER
               value: http://localhost:5000
             - name: REACT_APP_BASE_URL_CLASS
-              value: http://localhost:80
+              value: http://localhost:8000
 
 ---
 apiVersion: apps/v1
@@ -124,10 +124,15 @@ spec:
           volumneMounts:
             - name: auth-service-mysql-data
               mountPath: /var/lib/mysql
+            - name: init-sql
+              mountPath: /docker-entrypoint-initdb.d
       volumnes:
         - name: auth-service-mysql-data
           persistentVolumeClaim:
             claimName: auth-service-mysql-pvc
+        - name: init-sql
+          configMap:
+            name: auth-service-mysql-initdb
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -473,10 +478,15 @@ spec:
           volumneMounts:
             - name: class-service-postgresql-data
               mountPath: /var/lib/postgresql/data
+            - name: init-sql
+              mountPath: /docker-entrypoint-initdb.d
       volumnes:
         - name: class-service-postgresql-data
           persistentVolumeClaim:
             claimName: postgresql-pvc
+        - name: init-sql
+          configMap:
+            name: class-service-postgresql-initdb
 
 ---
 apiVersion: apps/v1
