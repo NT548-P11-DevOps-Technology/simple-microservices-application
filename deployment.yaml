@@ -327,7 +327,7 @@ spec:
     spec:
       containers:
         - name: lecturer-service-mongodb-container
-          image: mongo:latest
+          image: mongo:7.0.9
           ports:
             - containerPort: 27017
           env:
@@ -368,7 +368,7 @@ spec:
     spec:
       containers:
         - name: lecturer-mongo-express-container
-          image: mongo-express:latest
+          image: mongo-express:1-20
           ports:
             - containerPort: 8081
           env:
@@ -376,6 +376,8 @@ spec:
               value: "false"
             - name: ME_CONFIG_MONGODB_SERVER
               value: lecturer-service-mongodb
+            - name: ME_CONFIG_MONGODB_URL
+              value: mongodb://lecturer-service-mongodb:27017
             - name: ME_CONFIG_MONGODB_ADMINUSERNAME
               valueFrom:
                 secretKeyRef:
