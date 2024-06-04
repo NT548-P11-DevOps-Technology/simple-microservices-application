@@ -11,6 +11,6 @@ spec:
         path: "/"
         backend:
           service:
-            name: class-management-fe
+            name: frontend-service
             port:
               number: 3000
