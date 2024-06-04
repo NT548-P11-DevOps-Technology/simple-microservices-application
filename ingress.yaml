@@ -4,7 +4,7 @@ metadata:
   name: class-management-ingress
 spec:
   rules:
-  - host: NT533O21_group07.com
+  - host: nt533o21-group07.com
     http:
       paths:
       - pathType: Prefix
