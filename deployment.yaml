@@ -21,13 +21,13 @@ spec:
             - containerPort: 3000
           env:
             - name: REACT_APP_BASE_URL_AUTH
-              value: http://localhost:3077
+              value: http://auth-service:3077
             - name: REACT_APP_BASE_URL_STUDENT
-              value: http://localhost:8080
+              value: http://student-service:8080
             - name: REACT_APP_BASE_URL_LECTURER
-              value: http://localhost:5000
+              value: http://lecturer-service:5000
             - name: REACT_APP_BASE_URL_CLASS
-              value: http://localhost:8000
+              value: http://class-service:8000
 
 ---
 apiVersion: apps/v1
@@ -53,7 +53,7 @@ spec:
             - containerPort: 3077
           env:
             - name: BASE_URL_FE
-              value: http://localhost:3000
+              value: http://frontend-service:3000
             - name: AUTH_SERVICE_PORT
               value: "3077"
             - name: AUTH_SERVICE_HOST
