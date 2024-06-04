@@ -1,0 +1,14 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: class-management-ingress
+  # annotations:
+
+spec:
+  rules:
+  - host: NT533O21_group07.com
+    http:
+      paths:
+        - backend:
+            serviceName: class-management-fe
+            servicePort: 3000
