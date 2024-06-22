@@ -2,6 +2,7 @@ pipeline {
     agent any
     environment {
         TRIVY_CACHE_DIR = "${WORKSPACE}/trivy-cache"
+        TMPDIR = "${WORKSPACE}/trivy-tmp"
     }
     stages {
         stage('Authenticate with Docker Hub') {
@@ -70,7 +71,7 @@ pipeline {
 
                     // Perform Trivy scan for each image
                     images.each { imageName ->
-                        sh "TRIVY_CACHE_DIR=${env.TRIVY_CACHE_DIR} trivy image --scanners vuln --severity HIGH,CRITICAL ${imageName} >> ${reportFile}"
+                        sh "TRIVY_CACHE_DIR=${env.TRIVY_CACHE_DIR} TMPDIR=${TMPDIR} trivy image --scanners vuln --severity HIGH,CRITICAL ${imageName} >> ${reportFile}"
                     }
                 }
             }
