@@ -11,24 +11,69 @@ pipeline {
         }
         stage('Set up database') {
             steps {
-                echo 'Building mysql image...'
-                sh 'docker compose build mysql'
-                echo 'Building phpmyadmin image...'
-                sh 'docker compose build phpmyadmin'
+                echo 'Setting up databases...'
+                sh '''
+                    docker compose -f docker-compose.yml build student-service-mysql
+                    docker compose -f docker-compose.yml build auth-service-mysql
+                    docker compose -f docker-compose.yml build mongodb
+                    docker compose -f docker-compose.yml build postgresql
+                '''
             }
         }
-        stage('Build back-end application image') {
+        stage('Set up admin tools') {
             steps {
-                echo 'student-backend is being built...'
-                sh 'docker compose build student-backend'
+                echo 'Setting up admin tools...'
+                sh '''
+                    docker compose -f docker-compose.yml build auth-phpmyadmin
+                    docker compose -f docker-compose.yml build student-phpmyadmin
+                    docker compose -f docker-compose.yml build mongo-express
+                    docker compose -f docker-compose.yml build pgadmin
+                '''
+            }
+        }
+        stage('Build back-end application images') {
+            steps {
+                echo 'Building back-end application images...'
+                sh '''
+                    cp class-management-auth-service/Dockerfile .
+                    docker compose -f docker-compose.yml build class-mangement-auth-service
+                    cp class-management-student-service/Dockerfile .
+                    docker compose -f docker-compose.yml build class-management-student-service
+                    cp class-management-lecturer-service/Dockerfile .
+                    docker compose -f docker-compose.yml build class-management-lecturer-service
+                    cp class-management-class-service/Dockerfile .
+                    docker compose -f docker-compose.yml build class-management-class-service
+                '''
             }
         }
         stage('Build front-end application image') {
             steps {
-                echo 'student-fronend is being built...'
-                sh 'docker compose build student-frontend'
+                echo 'Building front-end application image...'
+                sh '''
+                    cp class-management-fe/Dockerfile .
+                    docker compose -f docker-compose.yml build class-mangement-fe
+                '''
             }
         }
+        // stage('Scan images with Trivy') {
+        //     steps {
+        //         sh '''
+        //             # Ensure the file exists and is writable
+        //             touch ${WORKSPACE}/trivy-report.txt
+        //             chmod +w ${WORKSPACE}/trivy-report.txt
+
+        //             # Remove the file if it exists
+        //             if [ -f ${WORKSPACE}/trivy-report.txt ]; then
+        //                 rm ${WORKSPACE}/trivy-report.txt
+        //             fi
+        //             trivy image --severity HIGH,CRITICAL chucthien03/class-management-auth-service >> ${WORKSPACE}/trivy-report.txt
+        //             trivy image --severity HIGH,CRITICAL chucthien03/class-management-student-service >> ${WORKSPACE}/trivy-report.txt
+        //             trivy image --severity HIGH,CRITICAL chucthien03/class-management-lecturer-service >> ${WORKSPACE}/trivy-report.txt
+        //             trivy image --severity HIGH,CRITICAL chucthien03/class-management-class-service >> ${WORKSPACE}/trivy-report.txt
+        //             trivy image --severity HIGH,CRITICAL chucthien03/class-management-fe >> ${WORKSPACE}/trivy-report.txt
+        //         '''
+        //     }
+        // }
         stage('Push images to Docker Hub') {
             steps {
                 withDockerRegistry(credentialsId: 'dockerhub-account', url: 'https://index.docker.io/v1/') {
@@ -44,6 +89,7 @@ pipeline {
                 sh 'docker compose ps'
 
                 echo 'Cleaning...'
+                sh 'docker rmi $(docker images -f "dangling=true" -q)'
                 sh 'docker compose down -v'
                 sh 'echo y | docker container prune'
                 sh 'docker compose ps'
