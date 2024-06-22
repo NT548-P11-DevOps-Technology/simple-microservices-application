@@ -74,7 +74,7 @@ pipeline {
 
                     // Perform Trivy scan for each image
                     images.each { imageName ->
-                        sh "TRIVY_CACHE_DIR=${env.TRIVY_CACHE_DIR} trivy --cache-dir TMPDIR=${env.TMPDIR} image --scanners vuln --severity HIGH,CRITICAL --cache-only --reset --only-update --skip-update ${imageName} >> ${reportFile}"
+                        sh "TRIVY_CACHE_DIR=${env.TRIVY_CACHE_DIR} trivy --cache-dir TMPDIR=${env.TMPDIR} image --scanners vuln --severity HIGH,CRITICAL ${imageName} >> ${reportFile}"
                     }
                 }
             }
