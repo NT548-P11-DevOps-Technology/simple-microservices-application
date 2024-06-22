@@ -35,13 +35,9 @@ pipeline {
             steps {
                 echo 'Building back-end application images...'
                 sh '''
-                    cp class-management-auth-service/Dockerfile .
                     docker compose -f docker-compose.yml build class-mangement-auth-service
-                    cp class-management-student-service/Dockerfile .
                     docker compose -f docker-compose.yml build class-management-student-service
-                    cp class-management-lecturer-service/Dockerfile .
                     docker compose -f docker-compose.yml build class-management-lecturer-service
-                    cp class-management-class-service/Dockerfile .
                     docker compose -f docker-compose.yml build class-management-class-service
                 '''
             }
@@ -50,7 +46,6 @@ pipeline {
             steps {
                 echo 'Building front-end application image...'
                 sh '''
-                    cp class-management-fe/Dockerfile .
                     docker compose -f docker-compose.yml build class-mangement-fe
                 '''
             }
