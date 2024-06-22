@@ -138,6 +138,7 @@ pipeline {
                      to: 'tranchucthienmt@gmail.com',
                      subject: "Pipeline Unstable: ${currentBuild.fullDisplayName}",
                      body: "Pipeline completed but unstable."
+                     attachmentsPattern: 'trivy-report.txt'
             cleanWs()
         }
         changed {
@@ -146,6 +147,7 @@ pipeline {
                      to: 'tranchucthienmt@gmail.com',
                      subject: "Pipeline Changed: ${currentBuild.fullDisplayName}",
                      body: "Pipeline state changed."
+                     attachmentsPattern: 'trivy-report.txt'
             cleanWs()
         }
     }
