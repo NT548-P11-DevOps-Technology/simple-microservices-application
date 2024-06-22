@@ -52,21 +52,24 @@ pipeline {
         }
         stage('Scan images with Trivy') {
             steps {
-                def images = [
+                script {
+                    def images = [
                         'th1enlm02/class-management-auth-service',
                         'th1enlm02/class-management-student-service',
                         'th1enlm02/class-management-lecturer-service',
                         'th1enlm02/class-management-class-service',
                         'th1enlm02/class-management-fe'
                     ]
-                // Ensure the file exists and is writable
-                def reportFile = "${WORKSPACE}/trivy-report.txt"
-                sh "touch ${reportFile}"
-                sh "chmod +w ${reportFile}"
 
-                // Perform Trivy scan for each image
-                images.each { imageName ->
-                    sh "TRIVY_CACHE_DIR=${env.TRIVY_CACHE_DIR} trivy image --severity HIGH,CRITICAL ${imageName} >> ${reportFile}"
+                    // Ensure the file exists and is writable
+                    def reportFile = "${WORKSPACE}/trivy-report.txt"
+                    sh "touch ${reportFile}"
+                    sh "chmod +w ${reportFile}"
+
+                    // Perform Trivy scan for each image
+                    images.each { imageName ->
+                        sh "TRIVY_CACHE_DIR=${env.TRIVY_CACHE_DIR} trivy image --severity HIGH,CRITICAL ${imageName} >> ${reportFile}"
+                    }
                 }
             }
         }
