@@ -133,7 +133,7 @@ services:
     container_name: pgadmin-container
     restart: on-failure
     ports:
-       - "8082:80"
+       - "8008:80"
     environment:
       - PGADMIN_DEFAULT_EMAIL=${PGADMIN_DEFAULT_EMAIL}
       - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_DEFAULT_PASSWORD}
