@@ -84,7 +84,7 @@ pipeline {
                 sh 'docker compose ps'
 
                 echo 'Cleaning...'
-                sh 'docker rmi $(docker images -f "dangling=true" -q)'
+                sh "docker rmi \$(docker images -f \"dangling=true\" -q)"
                 sh 'docker compose down -v'
                 sh 'echo y | docker container prune'
                 sh 'docker compose ps'
