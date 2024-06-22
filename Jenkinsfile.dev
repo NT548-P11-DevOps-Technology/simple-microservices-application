@@ -72,6 +72,9 @@ pipeline {
                     sh "touch ${reportFile}"
                     sh "chmod +w ${reportFile}"
 
+                    echo 'Downloading Trivy Java DB...'
+                    sh "TRIVY_CACHE_DIR=${env.TRIVY_CACHE_DIR} trivy image --download-java-db-only --no-progress"
+
                     // Perform Trivy scan for each image
                     images.each { imageName ->
                         sh "TRIVY_CACHE_DIR=${env.TRIVY_CACHE_DIR} TMPDIR=${env.TMPDIR} trivy image --scanners vuln --severity HIGH,CRITICAL ${imageName} >> ${reportFile}"
