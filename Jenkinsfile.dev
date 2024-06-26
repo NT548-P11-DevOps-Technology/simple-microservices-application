@@ -7,6 +7,8 @@ pipeline {
     stages {
         stage('Authenticate with Docker Hub') {
             steps {
+                sh 'docker rmi $(docker images -f "dangling=true" -q)'
+                sh 'docker rm -f $(docker ps -a -q)'
                 withDockerRegistry(credentialsId: 'dockerhub-account', url: 'https://index.docker.io/v1/') {
                     echo 'Logged in to Docker Hub'
                 }
@@ -97,8 +99,10 @@ pipeline {
                 sh 'docker compose ps'
 
                 echo 'Cleaning...'
+                sh 'docker images -f "dangling=true" -q | docker rmi'
                 sh 'docker compose down -v'
                 sh 'echo y | docker container prune'
+                sh 'docker ps -a -q | docker rm -f'
                 sh 'docker compose ps'
 
                 echo 'Deploying to Dev Environment...'
