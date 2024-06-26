@@ -1,5 +1,7 @@
 pipeline {
-    agent any
+    agent {
+        label 'main'
+    }
     environment {
         TRIVY_CACHE_DIR = "/var/lib/jenkins/trivy-cache"
         TMPDIR = "/var/lib/jenkins/trivy-tmp"
