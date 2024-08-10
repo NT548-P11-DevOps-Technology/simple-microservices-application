@@ -13,16 +13,16 @@ The application is built using a microservices architecture comprising:
     + [Student Service](https://github.com/th1enlm02/class-management-student-service): Manages student information, including storage, retrieval, update, and delete of student data. _(Java, Spring Boot framework)_ → MySQL
     + [Lecturer Service](https://github.com/th1enlm02/class-management-lecturer-service): Manages lecturer information, including storage, retrieval, update, and delete of lecturer data. _(Python, Flask)_ → MongoDB
     + [Class Service](https://github.com/th1enlm02/class-management-class-service): Manages class information, including storage, retrieval, update, and delete of class data. _(PHP)_ → PostgreSQL
-
+<br>
 <p align="center">
     <img src="./images/microservices-architecture.png" alt="Microservice Architecture">
 </p>
 
 ## 🤖 Dev Environment
 
-Once a deployment phase is complete, the application is packaged and deployed to a local development environment. This setup allow us to verify that services, running as containers, perform as expected and conduct to necessary tests before moving to others environments.
-For microservices, where each service may use different technologies and languages, creating well-designed Dockerfiles is crucial. They must include all necessary configurations for effective packaging and deployment, and be clearly defined for easy testing and updates.
-[**Docker Compose**](https://docs.docker.com/compose/ "Docker Compose") plays a vital role in managing Docker-based applications. It simplifies the process of running multiple containers together and setting up a specific environment using a single YAML file. This file defines containers, ports, services, networks, volumes, and more, making packaging, distribution, and deployment straightforward, often with a single command.
+Once a deployment phase is complete, the application is packaged and deployed to a local development environment. This setup allow us to verify that services, running as containers, perform as expected and conduct to necessary tests before moving to others environments.<br>
+For microservices, where each service may use different technologies and languages, creating well-designed Dockerfiles is crucial. They must include all necessary configurations for effective packaging and deployment, and be clearly defined for easy testing and updates.<br>
+[**Docker Compose**](https://docs.docker.com/compose/ "Docker Compose") plays a vital role in managing Docker-based applications. It simplifies the process of running multiple containers together and setting up a specific environment using a single YAML file. This file defines containers, ports, services, networks, volumes, and more, making packaging, distribution, and deployment straightforward, often with a single command.<br>
 
 <p align="center">
     <img src="./images/dev-environment.png" alt="Dev Environment">
@@ -63,5 +63,5 @@ If you do not modify the docker compose file, you can access to the application 
 Enter the URL below in the browser:
 
 ```
-https://localhost:3000/
+http://localhost:3000/
 ```
