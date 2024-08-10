@@ -30,7 +30,7 @@ For microservices, where each service may use different technologies and languag
 
 ## 🛠 Setup and Configuration
 
-#### Requirements
+### Requirements
 
 - **A Virtual Machine - Ubuntu** (prefer): This VM will host the necessary components for containerized application deployment and testing. Install required software:
     - [**Docker**](https://docs.docker.com/engine/install/ubuntu/)
@@ -38,11 +38,11 @@ For microservices, where each service may use different technologies and languag
 - **A DockerHub account**: Create an account on DockerHub if you don't already have one. DockerHub will be used to store and manage Docker images for the application.
 → You can sign up for a DockerHub account here: [DockerHub Sign Up](https://hub.docker.com/signup)
 
-#### Manual Deployment
+### Manual Deployment
 
 This project is set up for auto deployment with Jenkins server by defining a Jenkins file _(Jenkinsfile.dev)_. You can also configure and deploy manually by following these steps below:
 
-> **Notice**: This repo contains a ==.env== file which defines sensitive information (such as databases's name, username, password and more). You should be re-defined to suitable with your context.
+> **Notice**: This repo contains a **_.env_** file which defines sensitive information (such as databases's name, username, password and more). You should be re-defined to suitable with your context.
 
 Clone this project to the VM manually:
 ```
@@ -57,7 +57,7 @@ docker compose up --build -d
 
 → The `-d` option will help to run the command in detached mode (background), allowing you to continue working in the terminal without being occupied by Docker Compose logs.
 
-#### Testing the application
+### Testing the application
 
 If you do not modify the docker compose file, you can access to the application front-end by the exposed port. _(3000)_
 Enter the URL below in the browser:
