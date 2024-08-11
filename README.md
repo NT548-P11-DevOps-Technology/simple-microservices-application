@@ -35,7 +35,7 @@ For microservices, where each service may use different technologies and languag
 - **A Virtual Machine - Ubuntu** (prefer): This VM will host the necessary components for containerized application deployment and testing. Install required software:
     - [**Docker**](https://docs.docker.com/engine/install/ubuntu/)
     - [**Docker Compose**](https://docs.docker.com/compose/install/linux/)
-- **A DockerHub account**: Create an account on DockerHub if you don't already have one. DockerHub will be used to store and manage Docker images for the application.
+- **A DockerHub account**: Create an account on DockerHub if you don't already have one. DockerHub will be used to store and manage Docker images for the application.<br>
 → You can sign up for a DockerHub account here: [DockerHub Sign Up](https://hub.docker.com/signup)
 
 ### Manual Deployment
@@ -59,7 +59,7 @@ docker compose up --build -d
 
 ### Testing the application
 
-If you do not modify the docker compose file, you can access to the application front-end by the exposed port. _(3000)_
+If you do not modify the docker compose file, you can access to the application front-end by the exposed port. _(3000)_<br>
 Enter the URL below in the browser:
 
 ```
