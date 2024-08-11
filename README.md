@@ -42,7 +42,7 @@ For microservices, where each service may use different technologies and languag
 
 This project is set up for auto deployment with Jenkins server by defining a Jenkins file _(Jenkinsfile.dev)_. You can also configure and deploy manually by following these steps below:
 
-> **Notice**: This repo contains a **_.env_** file which defines sensitive information (such as databases's name, username, password and more). You should be re-defined to suitable with your context.
+> :memo: **Notice**: This repo contains a **_.env_** file which defines sensitive information (such as databases's name, username, password and more). You should be re-defined to suitable with your context.
 
 Clone this project to the VM manually:
 ```
