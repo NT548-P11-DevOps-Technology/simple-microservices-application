@@ -42,16 +42,16 @@ For microservices, where each service may use different technologies and languag
 
 This project is set up for auto deployment with Jenkins server by defining a Jenkins file _(Jenkinsfile.dev)_. You can also configure and deploy manually by following these steps below:
 
-> :memo: **Notice**: This repo contains a **_.env_** file which defines sensitive information (such as databases's name, username, password and more). You should be re-defined to suitable with your context.
+> :memo: **Notice**: This repo contains a **_.env_** file which defines sensitive information (such as databases's name, username, password and more). You should re-define to suit with your context.
 
 Clone this project to the VM manually:
-```
+```bash
 git clone --recurse-submodules https://github.com/NT114-O21-DACN-DevOps/class-management.git
 ```
 → The command above will clone this repo along with all its submodules which contain all of the source codes for both front-end and back-end services.
 
 After cloning the repositories, use `docker compose` command to build and run the application locally:
-```
+```bash
 docker compose up --build -d
 ```
 
