@@ -45,6 +45,32 @@ services:
       timeout: 20s
       retries: 5
       start_period: 30s
+  auth-phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: auth-phpmyadmin-container
+    restart: on-failure
+    ports:
+      - "79:80"
+    networks:
+      - backend-network
+    environment:
+      - PMA_HOST=auth-service-mysql
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+    depends_on:
+      - auth-service-mysql
+  student-phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: student-phpmyadmin-container
+    restart: on-failure
+    ports:
+      - "81:80"
+    networks:
+      - backend-network
+    environment:
+      - PMA_HOST=student-service-mysql
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+    depends_on:
+      - student-service-mysql
   mongodb:
     image: mongo:7.0.9
     container_name: mongodb-container
@@ -64,6 +90,23 @@ services:
       timeout: 10s
       retries: 3
       start_period: 5s
+  mongo-express:
+    image: mongo-express:1-20
+    container_name: mongo-express-container
+    restart: always
+    ports:
+      - "8081:8081"
+    networks:
+      - backend-network
+    environment:
+      - ME_CONFIG_BASICAUTH=false
+      - ME_CONFIG_MONGODB_SERVER=mongodb-container
+      - ME_CONFIG_MONGODB_URL=mongodb://mongodb-container:27017
+      - ME_CONFIG_MONGODB_ADMINUSERNAME=root
+      - ME_CONFIG_MONGODB_ADMINPASSWORD=th1enlm02_root
+    depends_on:
+      mongodb:
+        condition: service_healthy
   postgresql:
     image: postgres:latest
     container_name: postgresql-container
@@ -85,6 +128,20 @@ services:
       timeout: 20s
       retries: 5
       start_period: 30s
+  pgadmin:
+    image: elestio/pgadmin:latest
+    container_name: pgadmin-container
+    restart: on-failure
+    ports:
+       - "8008:80"
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=${PGADMIN_DEFAULT_EMAIL}
+      - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_DEFAULT_PASSWORD}
+    networks:
+      - backend-network
+    depends_on:
+      postgresql:
+        condition: service_healthy
   class-mangement-fe:
     build:
       context: ./class-management-FE
