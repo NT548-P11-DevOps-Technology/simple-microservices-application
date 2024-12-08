@@ -1,0 +1,83 @@
+name: CI Pipeline
+on:
+  push:
+    branches:
+      - main
+      - stage
+  pull_request:
+    branches:
+      - main
+      - stage
+jobs:
+  sonar_scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          submodules: recursive
+
+      - name: Set up SonarQube Scanner
+        uses: sonarsource/sonarqube-scan-action@master
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }} 
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+        with:
+          projectBaseDir: .
+          args: >
+            -Dsonar.sources=.
+            -Dsonar.exclusions=**/*.java,**/node_modules/**,**/*.json
+            -Dsonar.language=js,ts
+            -Dsonar.sourceEncoding=UTF-8
+
+  build_and_push:
+    needs: sonar_scan
+    runs-on: ubuntu-latest
+  
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          submodules: recursive 
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      
+      - name: Set up Docker
+        uses: docker/setup-qemu-action@v2
+      
+      - name: Login to Harbor
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.HARBOR_USERNAME }}
+          password: ${{ secrets.HARBOR_PASSWORD }}
+          registry: ${{ secrets.HARBOR_REGISTRY }}
+      
+      - name: Set image name suffix based on branch and commit SHA
+        id: set-image-suffix
+        run: |
+          COMMIT_SHA=$(git rev-parse --short HEAD)
+          if [[ "${GITHUB_REF}" == "refs/heads/stage" ]]; then
+            echo "IMAGE_SUFFIX=-stag-${COMMIT_SHA}" >> $GITHUB_ENV
+          else
+            echo "IMAGE_SUFFIX=-${COMMIT_SHA}" >> $GITHUB_ENV
+          fi
+      
+      - name: Build Docker images
+        run: |
+          images=("th1enlm02/class-management-fe" "th1enlm02/class-management-auth-service" "th1enlm02/class-management-student-service")
+          for image in "${images[@]}"; do
+            image_name="${image}${IMAGE_SUFFIX}"
+            echo "Building image $image_name"
+            docker build -t ${{ secrets.HARBOR_REGISTRY }}/$image_name .
+          done
+      
+      - name: Push Docker images to Harbor
+        run: |
+          images=("th1enlm02/class-management-fe" "th1enlm02/class-management-auth-service" "th1enlm02/class-management-student-service")
+          for image in "${images[@]}"; do
+            image_name="${image}${IMAGE_SUFFIX}"
+            echo "Pushing image $image_name"
+            docker push ${{ secrets.HARBOR_REGISTRY }}/$image_name
