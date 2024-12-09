@@ -74,8 +74,9 @@ jobs:
           services=("FE" "auth-service" "class-service" "lecturer-service" "student-service")
           
           for service in "${services[@]}"; do
+            service_lowercase=$(echo $service | tr '[:upper:]' '[:lower:]')
             # Build image name with project prefix
-            image_name="${{ secrets.HARBOR_REGISTRY }}/class-management/${PROJECT}/${service}"
+            image_name="${{ secrets.HARBOR_REGISTRY }}/class-management/${PROJECT}/${service_lowercase}"
             
             # Build Dockerfile path
             dockerfile_path="./class-management-${service}/Dockerfile"
