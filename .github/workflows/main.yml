@@ -17,7 +17,6 @@ jobs:
         with:
           fetch-depth: 0
           submodules: recursive
-
       - name: Set up SonarQube Scanner
         uses: sonarsource/sonarqube-scan-action@master
         env:
@@ -26,6 +25,8 @@ jobs:
         with:
           projectBaseDir: .
           args: >
+            -X
+            -Dsonar.projectKey=devops
             -Dsonar.sources=.
             -Dsonar.exclusions=**/*.java,**/node_modules/**,**/*.json
             -Dsonar.language=js,ts
@@ -34,7 +35,6 @@ jobs:
   build_and_push:
     needs: sonar_scan
     runs-on: ubuntu-latest
-  
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -55,29 +55,37 @@ jobs:
           password: ${{ secrets.HARBOR_PASSWORD }}
           registry: ${{ secrets.HARBOR_REGISTRY }}
       
-      - name: Set image name suffix based on branch and commit SHA
-        id: set-image-suffix
+      - name: Set environment variables
+        id: set-env
         run: |
-          COMMIT_SHA=$(git rev-parse --short HEAD)
-          if [[ "${GITHUB_REF}" == "refs/heads/stage" ]]; then
-            echo "IMAGE_SUFFIX=-stag-${COMMIT_SHA}" >> $GITHUB_ENV
-          else
-            echo "IMAGE_SUFFIX=-${COMMIT_SHA}" >> $GITHUB_ENV
+          if [[ "${GITHUB_REF}" == "refs/heads/main" ]]; then
+            echo "PROJECT=production" >> $GITHUB_ENV
+            echo "DOCKER_TAG=latest" >> $GITHUB_ENV
+          elif [[ "${GITHUB_REF}" == "refs/heads/stage" ]]; then
+            echo "PROJECT=staging" >> $GITHUB_ENV
+            echo "DOCKER_TAG=latest" >> $GITHUB_ENV
           fi
+          echo "COMMIT_SHA=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
       
-      - name: Build Docker images
+      - name: Build and push Docker images
         run: |
-          images=("th1enlm02/class-management-fe" "th1enlm02/class-management-auth-service" "th1enlm02/class-management-student-service")
-          for image in "${images[@]}"; do
-            image_name="${image}${IMAGE_SUFFIX}"
-            echo "Building image $image_name"
-            docker build -t ${{ secrets.HARBOR_REGISTRY }}/$image_name .
+          # Define services
+          services=("fe" "auth-service" "student-service")
+          
+          for service in "${services[@]}"; do
+            # Build image name with project prefix
+            image_name="${{ secrets.HARBOR_REGISTRY }}/${PROJECT}/class-management-${service}"
+            
+            # Build image
+            echo "Building $image_name..."
+            docker build \
+              -t ${image_name}:${DOCKER_TAG} \
+              -t ${image_name}:${COMMIT_SHA} \
+              --build-arg ENV=${PROJECT} \
+              -f Dockerfile.${service} .
+            
+            # Push images
+            echo "Pushing $image_name..."
+            docker push ${image_name}:${DOCKER_TAG}
+            docker push ${image_name}:${COMMIT_SHA}
           done
-      
-      - name: Push Docker images to Harbor
-        run: |
-          images=("th1enlm02/class-management-fe" "th1enlm02/class-management-auth-service" "th1enlm02/class-management-student-service")
-          for image in "${images[@]}"; do
-            image_name="${image}${IMAGE_SUFFIX}"
-            echo "Pushing image $image_name"
-            docker push ${{ secrets.HARBOR_REGISTRY }}/$image_name
