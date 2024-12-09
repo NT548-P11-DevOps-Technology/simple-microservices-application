@@ -49,11 +49,11 @@ jobs:
         uses: docker/setup-qemu-action@v2
       
       - name: Login to Harbor
-        uses: docker/login-action@v2
+        uses: docker/login-action@v3
         with:
           username: ${{ secrets.HARBOR_USERNAME }}
           password: ${{ secrets.HARBOR_PASSWORD }}
-          registry: ${{ secrets.HARBOR_REGISTRY }}
+          registry: harbor.th1enlm02.live
       
       - name: Set environment variables
         id: set-env
