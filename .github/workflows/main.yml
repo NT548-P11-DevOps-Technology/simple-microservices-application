@@ -71,11 +71,14 @@ jobs:
       - name: Build and push Docker images
         run: |
           # Define services
-          services=("fe" "auth-service" "student-service")
+          services=("FE" "auth-service" "class-service" "lecturer-service" "student-service")
           
           for service in "${services[@]}"; do
             # Build image name with project prefix
-            image_name="${{ secrets.HARBOR_REGISTRY }}/${PROJECT}/class-management-${service}"
+            image_name="${{ secrets.HARBOR_REGISTRY }}/class-management/${PROJECT}/${service}"
+            
+            # Build Dockerfile path
+            dockerfile_path="./class-management-${service}/Dockerfile"
             
             # Build image
             echo "Building $image_name..."
@@ -83,7 +86,7 @@ jobs:
               -t ${image_name}:${DOCKER_TAG} \
               -t ${image_name}:${COMMIT_SHA} \
               --build-arg ENV=${PROJECT} \
-              -f Dockerfile.${service} .
+              -f ${dockerfile_path} .
             
             # Push images
             echo "Pushing $image_name..."
