@@ -87,12 +87,36 @@ jobs:
           )
           
           for service in "${services[@]}"; do
-            # Construct image name
-            image_name="${PROJECT}/class-management-${service#*-}"
+            case $service in
+              "class-mangement-fe")
+                image_tag="th1enlm02/class-management-fe"
+                ;;
+              "class-mangement-auth-service")
+                image_tag="th1enlm02/class-management-auth-service"
+                ;;
+              "class-management-student-service")
+                image_tag="th1enlm02/class-management-student-service"
+                ;;
+              "class-management-lecturer-service")
+                image_tag="th1enlm02/class-management-lecturer-service"
+                ;;
+              "class-management-class-service")
+                image_tag="th1enlm02/class-management-class-service"
+                ;;
+              *)
+                echo "Unknown service: $service"
+                continue
+                ;;
+            esac
+            
+            # Construct full image name for Harbor registry
+            full_image_name="${PROJECT}/class-management-${service#*-}"
             
             # Tag images
-            docker tag $service $image_name:$COMMIT_SHA
+            docker tag $image_tag $full_image_name:$DOCKER_TAG
+            docker tag $image_tag $full_image_name:$COMMIT_SHA
             
-            # Push image
-            docker push $image_name:$COMMIT_SHA
+            # Push images
+            docker push $full_image_name:$DOCKER_TAG
+            docker push $full_image_name:$COMMIT_SHA
           done
