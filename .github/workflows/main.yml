@@ -80,28 +80,28 @@ jobs:
         run: |
           # Services to push
           services=(
-            "class-mangement-fe"
-            "class-mangement-auth-service"
-            "class-management-student-service"
-            "class-management-lecturer-service"
-            "class-management-class-service"
+            "fe"
+            "auth-service"
+            "student-service"
+            "lecturer-service"
+            "class-service"
           )
           
           for service in "${services[@]}"; do
             case $service in
-              "class-mangement-fe")
+              "fe")
                 image_tag="th1enlm02/class-management-fe"
                 ;;
-              "class-mangement-auth-service")
+              "auth-service")
                 image_tag="th1enlm02/class-management-auth-service"
                 ;;
-              "class-management-student-service")
+              "student-service")
                 image_tag="th1enlm02/class-management-student-service"
                 ;;
-              "class-management-lecturer-service")
+              "lecturer-service")
                 image_tag="th1enlm02/class-management-lecturer-service"
                 ;;
-              "class-management-class-service")
+              "class-service")
                 image_tag="th1enlm02/class-management-class-service"
                 ;;
               *)
@@ -111,13 +111,27 @@ jobs:
             esac
             
             # Construct full image name for Harbor registry
-            full_image_name="${{ secrets.HARBOR_REGISTRY }}/${PROJECT}/${ENVIRONMENT}/${service#*-}"
+            full_image_name="${{ secrets.HARBOR_REGISTRY }}/${PROJECT}/${service}"
+
+            if [[ ${ENVIRONMENT} == staging ]]; then
+              # Tag images for staging
+              docker tag $image_tag $full_image_name:$ENVIRONMENT-$COMMIT_SHA
+              docker tag $image_tag $full_image_name:$ENVIRONMENT-latest
+              
+              # Push images for staging
+              docker push $full_image_name:$ENVIRONMENT-$COMMIT_SHA
+              docker push $full_image_name:$ENVIRONMENT-latest
             
-            # Tag images
-            docker tag $image_tag $full_image_name:$DOCKER_TAG
-            docker tag $image_tag $full_image_name:$COMMIT_SHA
-            
-            # Push images
-            docker push $full_image_name:$DOCKER_TAG
-            docker push $full_image_name:$COMMIT_SHA
+            elif [[ ${ENVIRONMENT} == production ]]; then
+              # Tag images for production
+              docker tag $image_tag $full_image_name:$COMMIT_SHA
+              docker tag $image_tag $full_image_name:latest
+              
+              # Push images for production
+              docker push $full_image_name:$COMMIT_SHA
+              docker push $full_image_name:latest
+            else
+              echo "Unknown environment: ${ENVIRONMENT}"
+              exit 1
+            fi
           done
