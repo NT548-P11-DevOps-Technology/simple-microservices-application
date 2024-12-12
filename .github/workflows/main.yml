@@ -64,10 +64,11 @@ jobs:
       - name: Set environment variables
         id: set-env
         run: |
+          echo "PROJECT=class-management" >> $GITHUB_ENV
           if [[ "${GITHUB_REF}" == "refs/heads/main" ]]; then
-            echo "PROJECT=production" >> $GITHUB_ENV
+            echo "ENVIRONMENT=production" >> $GITHUB_ENV
           elif [[ "${GITHUB_REF}" == "refs/heads/stage" ]]; then
-            echo "PROJECT=staging" >> $GITHUB_ENV
+            echo "ENVIRONMENT=staging" >> $GITHUB_ENV
           fi
           echo "COMMIT_SHA=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
       
@@ -110,7 +111,7 @@ jobs:
             esac
             
             # Construct full image name for Harbor registry
-            full_image_name="${PROJECT}/class-management-${service#*-}"
+            full_image_name="${{ secrets.HARBOR_REGISTRY }}/${PROJECT}/${ENVIRONMENT}/${service#*-}"
             
             # Tag images
             docker tag $image_tag $full_image_name:$DOCKER_TAG
