@@ -8,7 +8,6 @@ on:
     branches:
       - main
       - stage
-
 jobs:
   sonar_scan:
     runs-on: ubuntu-latest
@@ -32,7 +31,7 @@ jobs:
             -Dsonar.exclusions=**/*.java,**/node_modules/**,**/*.json
             -Dsonar.language=js,ts
             -Dsonar.sourceEncoding=UTF-8
-
+  
   build_and_push:
     needs: sonar_scan
     runs-on: ubuntu-latest
@@ -61,36 +60,33 @@ jobs:
         run: |
           if [[ "${GITHUB_REF}" == "refs/heads/main" ]]; then
             echo "PROJECT=production" >> $GITHUB_ENV
-            echo "DOCKER_TAG=latest" >> $GITHUB_ENV
           elif [[ "${GITHUB_REF}" == "refs/heads/stage" ]]; then
             echo "PROJECT=staging" >> $GITHUB_ENV
-            echo "DOCKER_TAG=latest" >> $GITHUB_ENV
           fi
           echo "COMMIT_SHA=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
       
-      - name: Build and push Docker images
+      - name: Build Docker Compose Services
         run: |
-          # Define services
-          services=("FE" "auth-service" "class-service" "lecturer-service" "student-service")
+          docker-compose build
+      
+      - name: Push Docker Images
+        run: |
+          # Services to push
+          services=(
+            "class-mangement-fe"
+            "class-mangement-auth-service"
+            "class-management-student-service"
+            "class-management-lecturer-service"
+            "class-management-class-service"
+          )
           
           for service in "${services[@]}"; do
-            service_lowercase=$(echo $service | tr '[:upper:]' '[:lower:]')
-            # Build image name with project prefix
-            image_name="${{ secrets.HARBOR_REGISTRY }}/class-management/${PROJECT}/${service_lowercase}"
+            # Construct image name
+            image_name="${PROJECT}/class-management-${service#*-}"
             
-            # Build Dockerfile path
-            dockerfile_path="./class-management-${service}/Dockerfile"
+            # Tag images
+            docker tag $service $image_name:$COMMIT_SHA
             
-            # Build image
-            echo "Building $image_name..."
-            docker build \
-              -t ${image_name}:${DOCKER_TAG} \
-              -t ${image_name}:${COMMIT_SHA} \
-              --build-arg ENV=${PROJECT} \
-              -f ${dockerfile_path} .
-            
-            # Push images
-            echo "Pushing $image_name..."
-            docker push ${image_name}:${DOCKER_TAG}
-            docker push ${image_name}:${COMMIT_SHA}
+            # Push image
+            docker push $image_name:$COMMIT_SHA
           done
