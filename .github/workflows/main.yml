@@ -78,60 +78,25 @@ jobs:
       
       - name: Push Docker Images
         run: |
-          # Services to push
-          services=(
-            "fe"
-            "auth-service"
-            "student-service"
-            "lecturer-service"
-            "class-service"
+          # Define services and corresponding image tags
+          declare -A service_tags=(
+            ["fe"]="th1enlm02/class-management-fe"
+            ["auth-service"]="th1enlm02/class-management-auth-service"
+            ["student-service"]="th1enlm02/class-management-student-service"
+            ["lecturer-service"]="th1enlm02/class-management-lecturer-service"
+            ["class-service"]="th1enlm02/class-management-class-service"
           )
-          
-          for service in "${services[@]}"; do
-            case $service in
-              "fe")
-                image_tag="th1enlm02/class-management-fe"
-                ;;
-              "auth-service")
-                image_tag="th1enlm02/class-management-auth-service"
-                ;;
-              "student-service")
-                image_tag="th1enlm02/class-management-student-service"
-                ;;
-              "lecturer-service")
-                image_tag="th1enlm02/class-management-lecturer-service"
-                ;;
-              "class-service")
-                image_tag="th1enlm02/class-management-class-service"
-                ;;
-              *)
-                echo "Unknown service: $service"
-                continue
-                ;;
-            esac
-            
-            # Construct full image name for Harbor registry
-            full_image_name="${{ secrets.HARBOR_REGISTRY }}/${PROJECT}/${service}"
+      
+          for service in "${!service_tags[@]}"; do
+            image_tag="${service_tags[$service]}"
 
-            if [[ ${ENVIRONMENT} == staging ]]; then
-              # Tag images for staging
-              docker tag $image_tag $full_image_name:$ENVIRONMENT-$COMMIT_SHA
-              docker tag $image_tag $full_image_name:$ENVIRONMENT-latest
-              
-              # Push images for staging
-              docker push $full_image_name:$ENVIRONMENT-$COMMIT_SHA
-              docker push $full_image_name:$ENVIRONMENT-latest
+            full_image_name="${{ secrets.HARBOR_REGISTRY }}/${ENVIRONMENT}/${service}"
+      
+            # Tag images for production
+            docker tag "$image_tag" "$full_image_name:$COMMIT_SHA"
+            docker tag "$image_tag" "$full_image_name:latest"
             
-            elif [[ ${ENVIRONMENT} == production ]]; then
-              # Tag images for production
-              docker tag $image_tag $full_image_name:$COMMIT_SHA
-              docker tag $image_tag $full_image_name:latest
-              
-              # Push images for production
-              docker push $full_image_name:$COMMIT_SHA
-              docker push $full_image_name:latest
-            else
-              echo "Unknown environment: ${ENVIRONMENT}"
-              exit 1
-            fi
+            # Push images for production
+            docker push "$full_image_name:$COMMIT_SHA"
+            docker push "$full_image_name:latest"
           done
